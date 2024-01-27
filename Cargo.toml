@@ -3,8 +3,7 @@ name = "backend"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+tokio = { version = "1.35.1", features = ["rt-multi-thread"] }
 axum = "0.7.4"
-tokio = { version= "1.35.1", features = ["rt-multi-thread"] }
+sqlx = { version = "0.7.3", features = ["postgres", "runtime-tokio-rustls"] }
