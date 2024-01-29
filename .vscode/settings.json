@@ -1,0 +1,10 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "./migrations/Cargo.toml",
+    ],
+    "inlineSQL.dbHost": "database",
+    "inlineSQL.dbPassword": "admin",
+    "inlineSQL.dbUser": "admin",
+    "inlineSQL.enableDBIntegration": true,
+    "inlineSQL.lintSQLFiles": true
+}
