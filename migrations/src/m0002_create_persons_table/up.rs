@@ -1,5 +1,4 @@
 use sqlx::PgPool;
-mod create_table;
 
 const QUERY: &str = "
     CREATE TABLE persons (
