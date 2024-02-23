@@ -28,7 +28,7 @@ async fn handler() -> Json<Person> {
 async fn main() {
     dotenv().ok();
 
-    let pool = get_pg_pool().await;
+    // let pool = get_pg_pool().await;
 
     let app = Router::new().route("/", get(handler));
 
