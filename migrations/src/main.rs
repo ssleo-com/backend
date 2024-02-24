@@ -6,22 +6,25 @@ use m0001_create_migrations_table::M0001CreateMigrationsTable;
 use m0002_create_persons_table::M0002CreatePersonsTable;
 use shared::{does_table_exist, get_pg_pool::get_pg_pool};
 mod migrations;
-use sqlx::Row;
+use sqlx::{postgres::PgRow, Row};
 
-use migrations::{Migration, Migrations};
+use migrations::{MigrationHandlers, Migrations};
+use models::Migration;
 
-async fn get_last_migration(pool: &sqlx::Pool<sqlx::Postgres>) -> Result<Option<i32>, sqlx::Error> {
-    if let Ok(Some(id)) = sqlx::query("SELECT MAX(id) FROM migrations")
-        .fetch_optional(pool)
-        .await
-    {
-        let last_migration: Option<i32> = id.get("MAX(id)");
+async fn get_last_migration(pool: &sqlx::Pool<sqlx::Postgres>) -> PgRow {
+    let max_query = sqlx::query("SELECT MAX(id), name FROM migrations GROUP BY name")
+        .fetch_one(pool)
+        .await;
 
-        println!("Last migration: {:?}", last_migration);
-        return Ok(last_migration);
+    match max_query {
+        Ok(row) => {
+            return row;
+        }
+        Err(err) => {
+            eprintln!("Failed to get last migration: {}", err);
+            std::process::exit(1)
+        }
     }
-
-    Err(sqlx::Error::RowNotFound)
 }
 
 #[tokio::main]
@@ -41,29 +44,23 @@ async fn main() {
 
     let migrations_table_exists = does_table_exist("migrations", &pool).await;
 
-    if migrations_table_exists {
-        let last_migration: Option<i32> = get_last_migration(&pool).await.unwrap();
-    }
-
     let migrations = vec![
         Migrations::M0001(M0001CreateMigrationsTable),
         Migrations::M0002(M0002CreatePersonsTable),
     ];
 
-    for (i, migration) in migrations.iter().enumerate() {
-        if i as i32 <= target_migration {
+    if migrations_table_exists {
+        let last_migration: PgRow = get_last_migration(&pool).await;
+        println!(
+            "Last migration: {:?}",
+            last_migration.get::<String, _>("name")
+        );
+    } else {
+        for (i, migration) in migrations.iter().enumerate() {
             match migration.up(&pool).await {
                 Ok(_) => println!("Migration {} applied successfully", i),
                 Err(err) => {
                     eprintln!("Failed to apply migration {}: {}", i, err);
-                    std::process::exit(1);
-                }
-            }
-        } else {
-            match migration.down(&pool).await {
-                Ok(_) => println!("Rollback of migration {} successful", i),
-                Err(err) => {
-                    eprintln!("Failed to rollback migration {}: {}", i, err);
                     std::process::exit(1);
                 }
             }

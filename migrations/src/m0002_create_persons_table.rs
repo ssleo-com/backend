@@ -1,4 +1,4 @@
-use crate::migrations::Migration;
+use crate::migrations::MigrationHandlers;
 use sqlx::PgPool;
 
 const UP_QUERY: &str = "
@@ -14,11 +14,15 @@ const UP_QUERY: &str = "
 
 const DOWN_QUERY: &str = "DROP TABLE persons;";
 
+const INSERT_MIGRATION: &str = "INSERT INTO migrations (name) VALUES ('M0002CreatePersonsTable');";
+
+#[derive(Debug)]
 pub struct M0002CreatePersonsTable;
 
-impl Migration for M0002CreatePersonsTable {
+impl MigrationHandlers for M0002CreatePersonsTable {
     async fn up(&self, pool: &PgPool) -> Result<(), sqlx::Error> {
         sqlx::query(UP_QUERY).execute(pool).await?;
+        sqlx::query(INSERT_MIGRATION).execute(pool).await?;
         Ok(())
     }
 

@@ -5,17 +5,18 @@ use crate::{
     m0002_create_persons_table::M0002CreatePersonsTable,
 };
 
+#[derive(Debug)]
 pub enum Migrations {
     M0001(M0001CreateMigrationsTable),
     M0002(M0002CreatePersonsTable),
 }
 
-pub trait Migration {
+pub trait MigrationHandlers {
     async fn up(&self, pool: &PgPool) -> Result<(), sqlx::Error>;
     async fn down(&self, pool: &PgPool) -> Result<(), sqlx::Error>;
 }
 
-impl Migration for Migrations {
+impl MigrationHandlers for Migrations {
     async fn up(&self, pool: &PgPool) -> Result<(), sqlx::Error> {
         match self {
             Migrations::M0001(migration) => migration.up(pool).await,
