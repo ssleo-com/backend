@@ -4,10 +4,25 @@ mod m0002_create_persons_table;
 use dotenv::dotenv;
 use m0001_create_migrations_table::M0001CreateMigrationsTable;
 use m0002_create_persons_table::M0002CreatePersonsTable;
-use shared::get_pg_pool::get_pg_pool;
+use shared::{does_table_exist, get_pg_pool::get_pg_pool};
 mod migrations;
+use sqlx::Row;
 
 use migrations::{Migration, Migrations};
+
+async fn get_last_migration(pool: &sqlx::Pool<sqlx::Postgres>) -> Result<Option<i32>, sqlx::Error> {
+    if let Ok(Some(id)) = sqlx::query("SELECT MAX(id) FROM migrations")
+        .fetch_optional(pool)
+        .await
+    {
+        let last_migration: Option<i32> = id.get("MAX(id)");
+
+        println!("Last migration: {:?}", last_migration);
+        return Ok(last_migration);
+    }
+
+    Err(sqlx::Error::RowNotFound)
+}
 
 #[tokio::main]
 async fn main() {
@@ -23,6 +38,12 @@ async fn main() {
     }
 
     let target_migration: i32 = args[1].parse().expect("Invalid migration number");
+
+    let migrations_table_exists = does_table_exist("migrations", &pool).await;
+
+    if migrations_table_exists {
+        let last_migration: Option<i32> = get_last_migration(&pool).await.unwrap();
+    }
 
     let migrations = vec![
         Migrations::M0001(M0001CreateMigrationsTable),
