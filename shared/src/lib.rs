@@ -8,7 +8,7 @@ pub async fn does_table_exist(name: &str, pool: &PgPool) -> bool {
             SELECT EXISTS (
                 SELECT 1
                 FROM   information_schema.tables
-                WHERE  table_schema = 'ssleo'
+                WHERE  table_catalog = 'ssleo'
                 AND    table_name = '{}'
             );
         ",
@@ -18,11 +18,11 @@ pub async fn does_table_exist(name: &str, pool: &PgPool) -> bool {
     let exists: bool = sqlx::query_scalar(&query).fetch_one(pool).await.unwrap();
 
     if exists {
-        println!("The table exists.");
+        println!("{}", format!("The {name} table exists."));
         return true;
     }
 
-    println!("The table does not exist.");
+    println!("{}", format!("The {name} table does not exist."));
     false
 }
 
