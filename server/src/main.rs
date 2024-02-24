@@ -1,9 +1,7 @@
-use axum::{extract::Path, routing::get, Json, Router};
+use axum::{routing::get, Json, Router};
 use dotenv::dotenv;
 use serde::Serialize;
 use shared::get_pg_pool::get_pg_pool;
-use sqlx::{PgPool, Row};
-use std::env;
 
 #[derive(Serialize)]
 struct Person {

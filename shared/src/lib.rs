@@ -17,13 +17,7 @@ pub async fn does_table_exist(name: &str, pool: &PgPool) -> bool {
 
     let exists: bool = sqlx::query_scalar(&query).fetch_one(pool).await.unwrap();
 
-    if exists {
-        println!("{}", format!("The {name} table exists."));
-        return true;
-    }
-
-    println!("{}", format!("The {name} table does not exist."));
-    false
+    exists
 }
 
 pub fn get_env_var(name: &str) -> String {
