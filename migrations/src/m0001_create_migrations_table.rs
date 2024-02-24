@@ -1,4 +1,4 @@
-use crate::migration::Migration;
+use crate::migrations::Migration;
 use sqlx::PgPool;
 
 const UP_QUERY: &str = "

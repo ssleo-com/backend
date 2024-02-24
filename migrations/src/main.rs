@@ -1,5 +1,3 @@
-// migration_runner.rs
-
 mod m0001_create_migrations_table;
 mod m0002_create_persons_table;
 
@@ -7,28 +5,9 @@ use dotenv::dotenv;
 use m0001_create_migrations_table::M0001CreateMigrationsTable;
 use m0002_create_persons_table::M0002CreatePersonsTable;
 use shared::get_pg_pool::get_pg_pool;
-use sqlx::PgPool;
-mod migration;
+mod migrations;
 
-use migration::{AllMigrations, Migration};
-
-impl Migration for AllMigrations {
-    async fn up(&self, pool: &PgPool) -> Result<(), sqlx::Error> {
-        match self {
-            AllMigrations::M0001(migration) => migration.up(pool).await,
-            AllMigrations::M0002(migration) => migration.up(pool).await,
-            // Add other cases as needed
-        }
-    }
-
-    async fn down(&self, pool: &PgPool) -> Result<(), sqlx::Error> {
-        match self {
-            AllMigrations::M0001(migration) => migration.down(pool).await,
-            AllMigrations::M0002(migration) => migration.down(pool).await,
-            // Add other cases as needed
-        }
-    }
-}
+use migrations::{Migration, Migrations};
 
 #[tokio::main]
 async fn main() {
@@ -46,8 +25,8 @@ async fn main() {
     let target_migration: i32 = args[1].parse().expect("Invalid migration number");
 
     let migrations = vec![
-        AllMigrations::M0001(M0001CreateMigrationsTable),
-        AllMigrations::M0002(M0002CreatePersonsTable),
+        Migrations::M0001(M0001CreateMigrationsTable),
+        Migrations::M0002(M0002CreatePersonsTable),
     ];
 
     for (i, migration) in migrations.iter().enumerate() {
