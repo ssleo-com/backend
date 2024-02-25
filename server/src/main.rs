@@ -1,24 +1,17 @@
-use axum::{extract::Path, routing::get, Json, Router};
+use axum::{routing::get, Json, Router};
 use dotenv::dotenv;
-use serde::Serialize;
-use shared::get_pg_pool::get_pg_pool;
-use sqlx::{PgPool, Row};
-use std::env;
 
-#[derive(Serialize)]
-struct Person {
-    id: i32,
-    name: String,
-    age: i32,
-    city: String,
-}
+use models::person::Person;
+use shared::get_pg_pool::get_pg_pool;
 
 async fn handler() -> Json<Person> {
     let user = Person {
         id: 1,
-        name: String::from("John"),
-        age: 30,
-        city: String::from("New York"),
+        first_name: String::from("John"),
+        last_name: String::from("Doe"),
+        date_of_birth: Some(String::from("1990-01-01")),
+        created_at: String::from("2021-01-01"),
+        updated_at: String::from("2021-01-01"),
     };
 
     Json(user)

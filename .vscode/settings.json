@@ -3,7 +3,6 @@
 		"./migrations/Cargo.toml",
 		"./server/Cargo.toml",
 		"./shared/Cargo.toml",
-		"./migrations/Cargo.toml"
 	],
     "editor.formatOnSave": true,
 	"editor.defaultFormatter": "rust-lang.rust-analyzer"
