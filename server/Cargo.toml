@@ -8,5 +8,6 @@ tokio = { version = "1.35.1", features = ["rt-multi-thread"] }
 axum = "0.7.4"
 sqlx = { version = "0.7.3", features = ["postgres", "runtime-tokio-rustls"] }
 dotenv = "0.15.0"
+models = { path = "../models" }
 shared = { path = "../shared" }
 serde = "1.0.197"

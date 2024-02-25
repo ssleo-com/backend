@@ -133,6 +133,7 @@ version = "0.1.0"
 dependencies = [
  "axum",
  "dotenv",
+ "models",
  "serde",
  "shared",
  "sqlx",
@@ -796,6 +797,17 @@ dependencies = [
  "libc",
  "wasi",
  "windows-sys 0.48.0",
+]
+
+[[package]]
+name = "models"
+version = "0.1.0"
+dependencies = [
+ "dotenv",
+ "serde",
+ "shared",
+ "sqlx",
+ "tokio",
 ]
 
 [[package]]

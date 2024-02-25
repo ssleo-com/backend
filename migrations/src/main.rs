@@ -75,11 +75,6 @@ async fn main() {
 
     let pool: PgPool = get_pg_pool().await;
 
-    // let migrations: Vec<Migrations> = vec![
-    //     Migrations::M0001(M0001CreateMigrationsTable),
-    //     Migrations::M0002(M0002CreatePersonsTable),
-    // ];
-
     let target_migration: i32 = args[1].parse().expect("Invalid migration number");
     let migrations_table_exists: bool = does_table_exist("migrations", &pool).await;
 

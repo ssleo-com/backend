@@ -12,7 +12,7 @@ const UP_QUERY: &str = "
 const DOWN_QUERY: &str = "DROP TABLE migrations;";
 
 const INSERT_MIGRATION: &str =
-    "INSERT INTO migrations (name) VALUES ('M0001CreateMigrationsTable');";
+    "INSERT INTO migrations (id, name) VALUES (1, 'M0001CreateMigrationsTable');";
 
 #[derive(Debug)]
 pub struct M0001CreateMigrationsTable;

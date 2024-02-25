@@ -14,7 +14,8 @@ const UP_QUERY: &str = "
 
 const DOWN_QUERY: &str = "DROP TABLE persons;";
 
-const INSERT_MIGRATION: &str = "INSERT INTO migrations (name) VALUES ('M0002CreatePersonsTable');";
+const INSERT_MIGRATION: &str =
+    "INSERT INTO migrations (id, name) VALUES (2, 'M0002CreatePersonsTable');";
 
 const REMOVE_MIGRATION: &str = "DELETE FROM migrations WHERE name = 'M0002CreatePersonsTable'";
 
