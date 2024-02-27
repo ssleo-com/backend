@@ -24,6 +24,7 @@ pub async fn get_pg_pool() -> PgPool {
 
     let url = get_pg_url(&pg_database, &pg_host, &pg_pass, &pg_port, &pg_user);
 
+    println!("Connecting to {}", url);
     let pool = sqlx::postgres::PgPool::connect(&url).await.unwrap();
 
     pool
