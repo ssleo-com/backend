@@ -12,14 +12,21 @@ pub struct Person {
     pub updated_at: Option<NaiveDateTime>,
 }
 
+#[derive(Serialize)]
+
 pub struct NewPerson {
     pub first_name: String,
     pub last_name: String,
     pub date_of_birth: Option<NaiveDate>,
 }
 
-impl NewPerson {
-    pub async fn save(new_person: &NewPerson, pool: &PgPool) -> Result<Person, sqlx::Error> {
+pub trait Save {
+    // TODO: Fix below warning
+    async fn save(&self, pool: &PgPool) -> Result<Person, sqlx::Error>;
+}
+
+impl Save for NewPerson {
+    async fn save(&self, pool: &PgPool) -> Result<Person, sqlx::Error> {
         let row = sqlx::query_as!(
             Person,
             r#"
@@ -27,9 +34,9 @@ impl NewPerson {
             VALUES ($1, $2, $3)
             RETURNING id, first_name, last_name, date_of_birth, created_at, updated_at
             "#,
-            new_person.first_name,
-            new_person.last_name,
-            new_person.date_of_birth
+            self.first_name,
+            self.last_name,
+            self.date_of_birth
         )
         .fetch_one(pool)
         .await?;
