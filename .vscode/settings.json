@@ -1,7 +1,7 @@
 {
 	"rust-analyzer.linkedProjects": [
 		"./migrations/Cargo.toml",
-		"./server/Cargo.toml",
+		"./views/Cargo.toml",
 		"./shared/Cargo.toml",
 	],
     "editor.formatOnSave": true,
