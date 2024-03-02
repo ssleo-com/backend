@@ -1,9 +1,12 @@
-use crate::{NewPerson, Person};
 use sqlx::PgPool;
 
+use crate::{NewPerson, Person};
+
 pub trait Create {
-    // TODO: Fix below warning
-    async fn create(&self, pool: &PgPool) -> Result<Person, sqlx::Error>;
+    fn create(
+        &self,
+        pool: &PgPool,
+    ) -> impl std::future::Future<Output = Result<Person, sqlx::Error>> + Send;
 }
 
 impl Create for NewPerson {

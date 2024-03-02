@@ -5,5 +5,7 @@
 		"./shared/Cargo.toml",
 	],
     "editor.formatOnSave": true,
-	"editor.defaultFormatter": "rust-lang.rust-analyzer"
+	"editor.defaultFormatter": "rust-lang.rust-analyzer",
+	"rust-analyzer.check.allTargets": true,
+	"rust-analyzer.checkOnSave": true
 }

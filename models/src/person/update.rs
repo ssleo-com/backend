@@ -2,8 +2,10 @@ use crate::Person;
 use sqlx::PgPool;
 
 pub trait Update {
-    // TODO: Fix below warning
-    async fn update(&self, pool: &PgPool) -> Result<Person, sqlx::Error>;
+    fn update(
+        &self,
+        pool: &PgPool,
+    ) -> impl std::future::Future<Output = Result<Person, sqlx::Error>> + Send;
 }
 
 impl Update for Person {
@@ -11,13 +13,14 @@ impl Update for Person {
         let row = sqlx::query_as!(
             Person,
             r#"
-            INSERT INTO persons (first_name, last_name, date_of_birth)
-            VALUES ($1, $2, $3)
+            UPDATE persons SET first_name = $1, last_name = $2, date_of_birth = $3
+            WHERE id = $4
             RETURNING id, first_name, last_name, date_of_birth, created_at, updated_at
             "#,
             self.first_name,
             self.last_name,
-            self.date_of_birth
+            self.date_of_birth,
+            self.id
         )
         .fetch_one(pool)
         .await?;

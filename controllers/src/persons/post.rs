@@ -2,10 +2,10 @@ use axum::Json;
 use chrono::NaiveDate;
 use models::person::create::Create;
 use models::NewPerson;
-use shared::get_pg_pool::get_pg_pool;
+use shared::get_pg_pool::conn;
 
 pub async fn post_handler() -> Json<NewPerson> {
-    let pool = get_pg_pool().await;
+    let pool = conn().await;
 
     let from_ymd_opt = NaiveDate::from_ymd_opt;
 
