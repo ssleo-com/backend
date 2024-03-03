@@ -16,11 +16,9 @@ pub struct Person {
     pub updated_at: Option<NaiveDateTime>,
 }
 
-// The NewPerson struct represents a data structure that
-// holds information about a person. It mirrors the
-// JSON structure of a person, coming from the client.
-// Id and timestamps are not included, as they are generated
-// by the database.
+// The NewPerson struct mirrors the JSON structure of a person,
+// coming from the client. Id and timestamps are not included,
+// as they are generatet by the database.
 #[derive(Serialize)]
 pub struct NewPerson {
     pub first_name: String,
@@ -28,9 +26,24 @@ pub struct NewPerson {
     pub date_of_birth: Option<NaiveDate>,
 }
 
+// The PatchPerson struct mirrors the JSON structure of a person,
+// coming from the client, during a patch request. It includes
+// optional fields, as the client may not want to update all
+// fields, thus the reason to use the patch method instead of put.
 #[derive(Serialize)]
 pub struct PatchPerson {
+    pub id: i32,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
     pub date_of_birth: Option<NaiveDate>,
+}
+
+// The SimplePerson struct is a simplified version of the Person
+// struct, and it is used for endpoints that do not require a full
+// version of the record, such as to fill the options of a dropdown.
+#[derive(Serialize)]
+pub struct SimplePerson {
+    pub id: i32,
+    pub first_name: String,
+    pub last_name: String,
 }
