@@ -9,5 +9,7 @@ axum = "0.7.4"
 sqlx = { version = "0.7.3", features = ["postgres", "runtime-tokio-rustls"] }
 dotenv = "0.15.0"
 models = { path = "../models" }
+controllers = { path = "../controllers" }
 shared = { path = "../shared" }
 serde = "1.0.197"
+chrono = { version = "0.4.34", features = ["serde"] }
