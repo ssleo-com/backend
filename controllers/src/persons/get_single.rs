@@ -1,27 +1,23 @@
-use axum::Json;
-use chrono::{NaiveDate, NaiveDateTime};
+use axum::{extract::Path, Json};
 
-use models::person::update::Update;
+use models::person::read::get_person_by_id_optional;
 use models::Person;
 
 use shared::get_pg_pool::conn;
 
-pub async fn get_single_handler() -> Json<Person> {
+pub async fn get_single_handler(Path(id): Path<i32>) -> Json<Person> {
     let pool = conn().await;
 
-    let from_ymd_opt = NaiveDate::from_ymd_opt;
-    let from_ymd_opt2 = NaiveDateTime::from_timestamp_opt;
+    println!("ID: {:?}", id);
 
-    let new_user = Person {
-        id: 1,
-        first_name: String::from("Jane"),
-        last_name: String::from("Doe"),
-        date_of_birth: from_ymd_opt(2015, 3, 14),
-        created_at: from_ymd_opt2(59, 1_500_000_000),
-        updated_at: from_ymd_opt2(59, 1_500_000_000),
+    let person = get_person_by_id_optional(&id, &pool).await.unwrap();
+
+    let result = match person {
+        Some(person) => Json(person),
+        None => {
+            std::process::exit(1);
+        }
     };
 
-    new_user.update(&pool).await.unwrap();
-
-    Json(new_user)
+    result
 }

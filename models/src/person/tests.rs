@@ -9,7 +9,7 @@ use models::{
     person::create::Create, person::delete::Delete, person::read::get_person_by_id_optional,
     person::update::Update, NewPerson, Person,
 };
-use shared::get_pg_pool::test_conn;
+use shared::get_pg_pool::{conn, test_conn};
 use sqlx::query;
 use sqlx::Row;
 
@@ -32,7 +32,7 @@ fn generate_test_person() -> NewPerson {
 async fn test_create_and_read_person() {
     dotenv().ok();
 
-    let pool = test_conn().await;
+    let pool = conn().await;
 
     for _ in 0..10 {
         let new_person = generate_test_person();
@@ -59,7 +59,7 @@ async fn test_create_and_read_person() {
 async fn test_update_person() {
     dotenv().ok();
 
-    let pool = test_conn().await;
+    let pool = conn().await;
 
     for _ in 0..10 {
         let new_person: NewPerson = generate_test_person();
@@ -101,7 +101,7 @@ async fn test_update_person() {
 async fn test_delete_person() {
     dotenv().ok();
 
-    let pool = test_conn().await;
+    let pool = conn().await;
 
     for _ in 0..10 {
         let new_person: NewPerson = generate_test_person();

@@ -4,7 +4,10 @@ mod m0002_create_persons_table;
 use dotenv::dotenv;
 use m0001_create_migrations_table::M0001CreateMigrationsTable;
 use m0002_create_persons_table::M0002CreatePersonsTable;
-use shared::{does_table_exist, get_pg_pool::conn};
+use shared::{
+    does_table_exist,
+    get_pg_pool::{conn, test_conn},
+};
 mod migrations;
 use sqlx::{postgres::PgRow, PgPool, Row};
 
@@ -73,7 +76,7 @@ async fn main() {
         std::process::exit(1);
     }
 
-    let pool: PgPool = conn().await;
+    let pool: PgPool = test_conn().await;
 
     let target_migration: i32 = args[1].parse().expect("Invalid migration number");
     let migrations_table_exists: bool = does_table_exist("migrations", &pool).await;
