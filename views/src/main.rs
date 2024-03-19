@@ -1,5 +1,7 @@
 use axum::{routing::get, Router};
-use controllers::{delete_handler, get_handler, get_single_handler, patch_handler, post_handler};
+use controllers::{
+    delete_handler, get_multiple_handler, get_single_handler, patch_handler, post_handler,
+};
 use dotenv::dotenv;
 
 #[tokio::main]
@@ -9,7 +11,7 @@ async fn main() {
     let app = Router::new()
         // TODO: The below needs to be updated to take into account bulk create,
         // bulk update, and bulk delete.
-        .route("/persons", get(get_handler).post(post_handler))
+        .route("/persons", get(get_multiple_handler).post(post_handler))
         .route(
             "/persons/:id",
             get(get_single_handler)

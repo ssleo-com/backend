@@ -76,7 +76,7 @@ async fn main() {
         std::process::exit(1);
     }
 
-    let pool: PgPool = test_conn().await;
+    let pool: PgPool = conn().await;
 
     let target_migration: i32 = args[1].parse().expect("Invalid migration number");
     let migrations_table_exists: bool = does_table_exist("migrations", &pool).await;
