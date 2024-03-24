@@ -1,4 +1,4 @@
-use crate::Person;
+use crate::models::Person;
 use sqlx::PgPool;
 
 pub trait Update {

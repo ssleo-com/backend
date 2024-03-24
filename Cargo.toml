@@ -1,20 +1,12 @@
 [package]
-name = "models"
+name = "backend"
 version = "0.1.0"
 edition = "2021"
 
-[lib]
-name = "models"
-path = "src/lib.rs"
-
-[[test]]
-name = "a"
-path = "src/person/tests.rs"
-
 [dependencies]
 tokio = { version = "1.35.1", features = ["rt-multi-thread", "macros"] }
+axum = "0.7.4"
 sqlx = { version = "0.7.3", features = ["postgres", "runtime-tokio-rustls", "time", "chrono" ] }
-shared = { path = "../shared" }
 dotenv = "0.15.0"
 serde = "1.0.197"
 chrono = { version = "0.4.34", features = ["serde"] }

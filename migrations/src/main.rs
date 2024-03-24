@@ -4,10 +4,7 @@ mod m0002_create_persons_table;
 use dotenv::dotenv;
 use m0001_create_migrations_table::M0001CreateMigrationsTable;
 use m0002_create_persons_table::M0002CreatePersonsTable;
-use shared::{
-    does_table_exist,
-    get_pg_pool::{conn, test_conn},
-};
+use shared::{does_table_exist, get_env_var, get_pg_pool::get_pg_pool};
 mod migrations;
 use sqlx::{postgres::PgRow, PgPool, Row};
 
@@ -65,6 +62,27 @@ async fn get_migration_by_number(number: i32) -> Option<Migrations> {
     }
 }
 
+pub async fn create_db(db_name: &str, user: &str, pool: &sqlx::PgPool) {
+    let query = format!("CREATE DATABASE \"{}\" OWNER \"{}\";", db_name, user);
+
+    match sqlx::query(&query).execute(pool).await {
+        Ok(_) => println!("Database created successfully"),
+        Err(e) => println!("Error creating database: {}", e),
+    }
+}
+
+pub async fn db_exists(db_name: &String, pool: &sqlx::PgPool) -> Option<PgRow> {
+    let query = r#"SELECT datname FROM pg_database WHERE datname = $1;"#;
+
+    let row: Option<PgRow> = sqlx::query(query)
+        .bind(db_name)
+        .fetch_optional(pool)
+        .await
+        .unwrap();
+
+    row
+}
+
 #[tokio::main]
 async fn main() {
     dotenv().ok();
@@ -76,7 +94,17 @@ async fn main() {
         std::process::exit(1);
     }
 
-    let pool: PgPool = conn().await;
+    let db_name = get_env_var("PG_DATABASE");
+
+    let pool: PgPool = get_pg_pool(&None).await;
+
+    let db_exists: Option<PgRow> = db_exists(&db_name, &pool).await;
+
+    if db_exists.is_none() {
+        create_db(&db_name, &get_env_var("PG_USER"), &pool).await;
+    }
+
+    let pool: PgPool = get_pg_pool(&Some(db_name)).await;
 
     let target_migration: i32 = args[1].parse().expect("Invalid migration number");
     let migrations_table_exists: bool = does_table_exist("migrations", &pool).await;
