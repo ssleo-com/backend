@@ -1,13 +1,6 @@
-cd models;
 cargo build --release;
-cd ../;
-cd shared;
+sudo cp ./target/release/backend /usr/local/bin/backend;
+cd migrations;
 cargo build --release;
-cd ../;
-cd controllers;
-cargo build --release;
-cd ../;
-cd views;
-cargo build --release;
-cd ../;
-./views/target/release/backend
+sudo cp ./target/release/migrations /usr/local/bin/migrate;
+cd -;
