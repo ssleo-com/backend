@@ -1,0 +1,181 @@
+    Checking backend v0.1.0 (/app)
+warning: unused import: `Json`
+ --> src/main.rs:3:27
+  |
+3 | use axum::{extract::Path, Json};
+  |                           ^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `extract::Path`
+ --> src/controllers/persons/get.rs:1:12
+  |
+1 | use axum::{extract::Path, Json};
+  |            ^^^^^^^^^^^^^
+
+warning: unused import: `migration::Migration`
+ --> src/models/mod.rs:2:9
+  |
+2 | pub use migration::Migration;
+  |         ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `sqlx::PgPool`
+  --> src/main.rs:14:5
+   |
+14 | use sqlx::PgPool;
+   |     ^^^^^^^^^^^^
+
+warning: use of deprecated associated function `chrono::NaiveDateTime::from_timestamp_opt`: use `DateTime::from_timestamp` instead
+  --> src/controllers/persons/delete.rs:14:40
+   |
+14 |     let from_ymd_opt2 = NaiveDateTime::from_timestamp_opt;
+   |                                        ^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+warning: unused variable: `pool`
+  --> src/controllers/persons/get_single.rs:10:54
+   |
+10 | pub async fn get_single_handler(Path(id): Path<i32>, pool: &PgPool) -> Json<Person> {
+   |                                                      ^^^^ help: if this is intentional, prefix it with an underscore: `_pool`
+   |
+   = note: `#[warn(unused_variables)]` on by default
+
+warning: use of deprecated associated function `chrono::NaiveDateTime::from_timestamp_opt`: use `DateTime::from_timestamp` instead
+  --> src/controllers/persons/patch.rs:15:40
+   |
+15 |     let from_ymd_opt2 = NaiveDateTime::from_timestamp_opt;
+   |                                        ^^^^^^^^^^^^^^^^^^
+
+warning: struct `Migration` is never constructed
+ --> src/models/migration.rs:1:12
+  |
+1 | pub struct Migration {
+  |            ^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` on by default
+
+warning: method `delete` is never used
+ --> src/models/person/delete.rs:7:8
+  |
+6 | pub trait Delete {
+  |           ------ method in this trait
+7 |     fn delete(&self, pool: &PgPool) -> impl Future<Output = Result<(), sqlx::Error>>;
+  |        ^^^^^^
+
+warning: function `get_simple_person_by_id` is never used
+  --> src/models/person/read.rs:32:14
+   |
+32 | pub async fn get_simple_person_by_id(id: &i32, pool: &PgPool) -> Result<SimplePerson, sqlx::Error> {
+   |              ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `does_table_exist` is never used
+ --> src/shared/does_table_exist.rs:3:14
+  |
+3 | pub async fn does_table_exist(name: &str, pool: &PgPool) -> bool {
+  |              ^^^^^^^^^^^^^^^^
+
+warning: returning the result of a `let` binding from a block
+  --> src/controllers/persons/get_single.rs:25:5
+   |
+18 | /     let result = match person {
+19 | |         Some(person) => Json(person),
+20 | |         None => {
+21 | |             std::process::exit(1);
+22 | |         }
+23 | |     };
+   | |______- unnecessary `let` binding
+24 |
+25 |       result
+   |       ^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#let_and_return
+   = note: `#[warn(clippy::let_and_return)]` on by default
+help: return the expression directly
+   |
+18 ~     
+19 | 
+20 ~     match person {
+21 +         Some(person) => Json(person),
+22 +         None => {
+23 +             std::process::exit(1);
+24 +         }
+25 +     }
+   |
+
+warning: this function can be simplified using the `async fn` syntax
+  --> src/models/person/delete.rs:11:5
+   |
+11 |     fn delete(&self, pool: &PgPool) -> impl Future<Output = Result<(), sqlx::Error>> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#manual_async_fn
+   = note: `#[warn(clippy::manual_async_fn)]` on by default
+help: make the function `async` and return the output of the future directly
+   |
+11 |     async fn delete(&self, pool: &PgPool) -> Result<(), sqlx::Error> {
+   |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+help: move the body of the async block to the enclosing function
+   |
+11 ~     fn delete(&self, pool: &PgPool) -> impl Future<Output = Result<(), sqlx::Error>> {
+12 +         sqlx::query(
+13 +             r#"
+14 +             DELETE FROM persons
+15 +             WHERE id = $1
+16 +             "#,
+17 +         )
+18 +         .bind(&self.id)
+19 +         .execute(pool)
+20 +         .await
+21 +         .expect("Failed to delete person from the database");
+22 + 
+23 +         Ok(())
+24 +     }
+   |
+
+warning: the borrowed expression implements the required traits
+  --> src/models/person/delete.rs:19:19
+   |
+19 |             .bind(&self.id)
+   |                   ^^^^^^^^ help: change this to: `self.id`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_borrows_for_generic_args
+   = note: `#[warn(clippy::needless_borrows_for_generic_args)]` on by default
+
+warning: module has the same name as its containing module
+ --> src/models/person/mod.rs:3:1
+  |
+3 | pub mod person;
+  | ^^^^^^^^^^^^^^^
+  |
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#module_inception
+  = note: `#[warn(clippy::module_inception)]` on by default
+
+warning: returning the result of a `let` binding from a block
+  --> src/shared/get_pg_pool.rs:37:5
+   |
+35 |     let pool = sqlx::postgres::PgPool::connect(&url).await.unwrap();
+   |     ---------------------------------------------------------------- unnecessary `let` binding
+36 |
+37 |     pool
+   |     ^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#let_and_return
+help: return the expression directly
+   |
+35 ~     
+36 | 
+37 ~     sqlx::postgres::PgPool::connect(&url).await.unwrap()
+   |
+
+warning: this expression creates a reference which is immediately dereferenced by the compiler
+  --> src/shared/get_pg_pool.rs:33:66
+   |
+33 |     let url = get_pg_url(&pg_user, &pg_pass, &pg_host, &pg_port, &pg_database);
+   |                                                                  ^^^^^^^^^^^^ help: change this to: `pg_database`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#needless_borrow
+   = note: `#[warn(clippy::needless_borrow)]` on by default
+
+warning: `backend` (bin "backend") generated 17 warnings (run `cargo clippy --fix --bin "backend"` to apply 9 suggestions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.78s
