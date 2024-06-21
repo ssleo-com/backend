@@ -1,14 +1,6 @@
-[package]
-name = "backend"
-version = "0.1.0"
-edition = "2021"
+[workspace]
 
-[dependencies]
-tokio = { version = "1.35.1", features = ["rt-multi-thread", "macros"] }
-axum = "0.7.4"
-sqlx = { version = "0.7.3", features = ["postgres", "runtime-tokio-rustls", "time", "chrono" ] }
-dotenv = "0.15.0"
-serde = "1.0.197"
-chrono = { version = "0.4.34", features = ["serde"] }
-fake = {version = "2.9.2", features = ["chrono"]}
-jsonwebtoken = "9.3.0"
+members = [
+    "apps/migrations",
+    "apps/ssleo"
+]
