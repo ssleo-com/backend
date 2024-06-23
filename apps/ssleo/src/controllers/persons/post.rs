@@ -2,9 +2,9 @@ use axum::Json;
 use chrono::NaiveDate;
 
 use crate::models::person::create::Create;
-use crate::models::NewPerson;
 use crate::shared::get_env_var::get_env_var;
 use crate::shared::get_pg_pool::get_pg_pool;
+use structs::NewPerson;
 
 pub async fn post_handler() -> Json<NewPerson> {
     let db_name = get_env_var("PG_DATABASE");

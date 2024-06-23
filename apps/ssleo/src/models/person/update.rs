@@ -1,5 +1,5 @@
-use crate::models::Person;
 use sqlx::PgPool;
+use structs::Person;
 
 pub trait Update {
     fn update(

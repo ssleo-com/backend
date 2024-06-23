@@ -1,7 +1,7 @@
 use sqlx::PgPool;
 use std::future::Future;
 
-use crate::models::Person;
+use structs::Person;
 
 pub trait Delete {
     fn delete(&self, pool: &PgPool) -> impl Future<Output = Result<(), sqlx::Error>>;

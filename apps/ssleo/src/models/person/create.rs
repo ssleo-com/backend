@@ -1,6 +1,6 @@
 use sqlx::PgPool;
 
-use crate::models::{NewPerson, Person};
+use structs::{NewPerson, Person};
 
 pub trait Create {
     fn create(

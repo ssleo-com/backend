@@ -1,12 +1,26 @@
-mod messages;
-
+mod commands;
+mod person;
 use clap::Parser;
-use messages::{EntityType, RustflixArgs};
+use commands::{EntityType, RustflixArgs};
+use person::query;
 
+fn handle_person_command(person_command: commands::PersonCommand) {
+    match person_command.command {
+        commands::PersonSubcommand::Create(create_person) => {
+            println!("Creating person: {create_person:?}");
+        }
+        commands::PersonSubcommand::Update(update_person) => {
+            println!("Updating person: {update_person:?}");
+        }
+        commands::PersonSubcommand::Delete(delete_entity) => {
+            println!("Deleting person: {delete_entity:?}");
+        }
+        commands::PersonSubcommand::Show => {
+            query();
+        }
+    }
+}
 fn main() {
-    println!("Welcome to Rustflix interactive session.");
-    println!("Type 'exit' to quit.");
-
     // Manually handle argument parsing to prevent automatic program exit
     let args_result = RustflixArgs::parse_from(std::env::args_os());
 
@@ -14,8 +28,8 @@ fn main() {
     match args_result {
         args => {
             match args.entity_type {
-                EntityType::User(user) => println!("User: {:?}", user),
-                EntityType::Video(video) => println!("Video: {:?}", video),
+                EntityType::Person(person) => handle_person_command(person),
+                EntityType::Video(video) => println!("Video: {video:?}"),
             };
         }
     }

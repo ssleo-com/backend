@@ -1,7 +1,7 @@
 use axum::{extract::Path, Json};
 
 use crate::models::person::read::get_person_by_id_optional;
-use crate::models::Person;
+use structs::Person;
 
 use crate::shared::get_env_var::get_env_var;
 use crate::shared::get_pg_pool::get_pg_pool;

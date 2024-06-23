@@ -2,7 +2,7 @@ use axum::Json;
 use chrono::{DateTime, NaiveDate, TimeZone, Utc};
 
 use crate::models::person::update::Update;
-use crate::models::Person;
+use structs::Person;
 use crate::shared::get_env_var::get_env_var;
 use crate::shared::get_pg_pool::get_pg_pool;
 

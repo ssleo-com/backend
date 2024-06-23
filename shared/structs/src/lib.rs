@@ -2,14 +2,14 @@ use chrono::{NaiveDate, Utc};
 
 // Add the missing generic argument for DateTime
 use chrono::DateTime;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 // The Person struct represents a data structure that
 // holds information about a person, in its database
 // structure format. It tries to mirror the database
 // column definitions, and this is how a person record
 // should look like when selected via a select all query.
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Person {
     pub id: i32,
     pub first_name: String,

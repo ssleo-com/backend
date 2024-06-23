@@ -18,3 +18,4 @@ serde = "1.0.197"
 chrono = { version = "0.4.34", features = ["serde"] }
 fake = { version = "2.9.2", features = ["chrono"] }
 jsonwebtoken = "9.3.0"
+structs = { path = "../../shared/structs" }

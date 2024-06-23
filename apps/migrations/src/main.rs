@@ -5,7 +5,9 @@ use dotenv::dotenv;
 use m0001_create_migrations_table::M0001CreateMigrationsTable;
 use m0002_create_persons_table::M0002CreatePersonsTable;
 mod shared;
-use shared::{does_table_exist::does_table_exist, get_env_var::get_env_var, get_pg_pool::get_pg_pool};
+use shared::{
+    does_table_exist::does_table_exist, get_env_var::get_env_var, get_pg_pool::get_pg_pool,
+};
 mod migrations;
 use sqlx::{postgres::PgRow, PgPool, Row};
 

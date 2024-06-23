@@ -1,8 +1,8 @@
 use sqlx::PgPool;
 
-use crate::models::Person;
+use structs::Person;
 
-use super::person::SimplePerson;
+use structs::SimplePerson;
 
 pub async fn get_person_by_id_optional(
     id: &i32,

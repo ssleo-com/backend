@@ -4,7 +4,6 @@ mod tests {
     use sqlx::PgPool;
 
     use crate::models::person::create::Create;
-    use crate::models::{NewPerson, Person};
     use chrono::NaiveDate;
     use dotenv::dotenv;
     use fake::faker::chrono::raw::Date;
@@ -12,6 +11,7 @@ mod tests {
     use fake::locales::EN;
     use fake::Fake;
     use fake::Faker;
+    use structs::{NewPerson, Person};
 
     use crate::shared::get_pg_pool::get_pg_pool;
 
