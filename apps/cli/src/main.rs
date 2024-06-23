@@ -1,48 +1,22 @@
 mod messages;
-use std::io::{self, Write};
-use std::os::unix::process::CommandExt;
-use std::process::{Command, Stdio};
-use std::time::Instant;
+
+use clap::Parser;
+use messages::{EntityType, RustflixArgs};
 
 fn main() {
-    println!("\n{}", messages::WELCOME);
+    println!("Welcome to Rustflix interactive session.");
+    println!("Type 'exit' to quit.");
 
-    println!("{}", messages::HELP);
+    // Manually handle argument parsing to prevent automatic program exit
+    let args_result = RustflixArgs::parse_from(std::env::args_os());
 
-    loop {
-        print!("\n{}", messages::PROMPT);
-
-        io::stdout().flush().unwrap();
-
-        let mut input = String::new();
-
-        io::stdin()
-            .read_line(&mut input)
-            .expect(messages::FAILED_TO_READ_INPUT);
-
-        let input = input.trim();
-
-        match input {
-            "help" => println!("{}", messages::HELP),
-            "connect" => println!("Connecting..."),
-            "query" => {
-                let start_time = Instant::now();
-                let output = Command::new("curl")
-                    .arg("localhost:9090/persons/1")
-                    .output()
-                    .expect("Failed to execute command");
-                let elapsed_time = start_time.elapsed();
-                println!("Req duration: {:?}", elapsed_time);
-                if output.status.success() {
-                    let response = String::from_utf8_lossy(&output.stdout);
-                    println!("Response:\n{}", response);
-                } else {
-                    let error = String::from_utf8_lossy(&output.stderr);
-                    eprintln!("Error executing command:\n{}", error);
-                }
-            }
-            "exit" => break,
-            _ => println!("Command not recognized."),
+    // Check if parsing was successful or handle errors
+    match args_result {
+        args => {
+            match args.entity_type {
+                EntityType::User(user) => println!("User: {:?}", user),
+                EntityType::Video(video) => println!("Video: {:?}", video),
+            };
         }
     }
 }
