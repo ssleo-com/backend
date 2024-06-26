@@ -1,0 +1,13 @@
+[package]
+name = "cli"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.5.7", features = ["derive"] }
+reqwest = { version = "0.12.5", features = ["blocking", "json"] }
+serde = { version = "1.0.197", features = ["derive"] }
+structs = { path = "../../shared/structs" }
+chrono = { version = "0.4.34", features = ["serde"] }
+serde_json = "1.0.117"
+comfy-table = "7.1.1"

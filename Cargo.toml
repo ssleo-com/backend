@@ -1,0 +1,5 @@
+[workspace]
+
+members = ["apps/cli", "apps/migrations", "apps/ssleo", "shared/structs"]
+
+resolver = "2"
