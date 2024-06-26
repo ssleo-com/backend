@@ -1,8 +1,8 @@
 mod commands;
-mod person;
+mod persons;
 use clap::Parser;
 use commands::{EntityType, RustflixArgs};
-use person::query;
+use persons::show;
 
 fn handle_person_command(person_command: commands::PersonCommand) {
     match person_command.command {
@@ -16,7 +16,7 @@ fn handle_person_command(person_command: commands::PersonCommand) {
             println!("Deleting person: {delete_entity:?}");
         }
         commands::PersonSubcommand::Show => {
-            query();
+            show().unwrap();
         }
     }
 }

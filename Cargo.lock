@@ -197,6 +197,8 @@ dependencies = [
  "fake",
  "jsonwebtoken",
  "serde",
+ "serde_json",
+ "serde_urlencoded",
  "sqlx",
  "structs",
  "tokio",

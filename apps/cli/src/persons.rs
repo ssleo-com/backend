@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use std::{error::Error, time::Instant};
 use structs::Person;
 
-pub fn query() -> Result<(), Box<dyn Error>> {
+pub fn show() -> Result<(), Box<dyn Error>> {
     // Create a reqwest client
     let client = Client::new();
 
@@ -19,11 +19,11 @@ pub fn query() -> Result<(), Box<dyn Error>> {
     match response {
         Ok(res) => {
             let elapsed_time = start_time.elapsed();
-            println!("Req duration: {:?}", elapsed_time);
+            println!("Req duration: {elapsed_time:?}");
 
             if res.status().is_success() {
                 // Deserialize JSON response to a structure matching your data
-                let json_data: serde_json::Value = res.json()?;
+                let json_data: serde_json::Value = res.json().unwrap();
                 let persons_json = &json_data["data"];
 
                 // Deserialize each person JSON object into a Vec<Person>
@@ -37,13 +37,13 @@ pub fn query() -> Result<(), Box<dyn Error>> {
                 let mut table = Table::new();
 
                 // Define table headers
-                table.set_header(vec![
-                    "ID".to_string(),
-                    "First Name".to_string(),
-                    "Last Name".to_string(),
-                    "Date of Birth".to_string(),
-                    "Created At".to_string(),
-                    "Updated At".to_string(),
+                table.set_header([
+                    "ID",
+                    "First Name",
+                    "Last Name",
+                    "Date of Birth",
+                    "Created At",
+                    "Updated At",
                 ]);
 
                 // Add rows to the table
@@ -54,27 +54,27 @@ pub fn query() -> Result<(), Box<dyn Error>> {
                         person.last_name.clone(),
                         person
                             .date_of_birth
-                            .map_or_else(|| "".to_string(), |dob| dob.to_string()),
+                            .map_or_else(|| String::from(""), |dob| dob.to_string()),
                         person
                             .created_at
-                            .map_or_else(|| "".to_string(), |dt| dt.to_string()),
+                            .map_or_else(|| String::from(""), |dt| dt.to_string()),
                         person
                             .updated_at
-                            .map_or_else(|| "".to_string(), |dt| dt.to_string()),
+                            .map_or_else(|| String::from(""), |dt| dt.to_string()),
                     ]);
                 }
 
                 // Print the table
                 table.set_content_arrangement(ContentArrangement::Dynamic);
-                println!("{}", table);
+                println!("{table}");
             } else {
                 eprintln!("Error: HTTP {}", res.status());
-                let body = res.text()?;
-                eprintln!("Response body:\n{}", body);
+                let body = res.text().unwrap();
+                eprintln!("Response body:\n{body}");
             }
         }
         Err(err) => {
-            eprintln!("Error executing request: {}", err);
+            eprintln!("Error executing request: {err}");
         }
     }
 

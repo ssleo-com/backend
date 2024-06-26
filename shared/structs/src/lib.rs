@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 // structure format. It tries to mirror the database
 // column definitions, and this is how a person record
 // should look like when selected via a select all query.
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Person {
     pub id: i32,
     pub first_name: String,
@@ -17,6 +17,14 @@ pub struct Person {
     pub date_of_birth: Option<NaiveDate>,
     pub created_at: Option<DateTime<Utc>>,
     pub updated_at: Option<DateTime<Utc>>,
+}
+
+/// Used for searching and filtering. You should have
+/// the ability to search a person by any of the fields
+/// below.
+#[derive(Serialize, Deserialize, Debug)]
+pub struct SearchPerson {
+    pub id: Option<i32>,
 }
 
 // The NewPerson struct mirrors the JSON structure of a person,
