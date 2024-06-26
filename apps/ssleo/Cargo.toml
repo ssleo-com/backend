@@ -19,3 +19,5 @@ chrono = { version = "0.4.34", features = ["serde"] }
 fake = { version = "2.9.2", features = ["chrono"] }
 jsonwebtoken = "9.3.0"
 structs = { path = "../../shared/structs" }
+serde_urlencoded = "0.7.1"
+serde_json = "1.0.117"
